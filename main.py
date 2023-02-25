@@ -4,7 +4,6 @@ from application.config import LocalDevelopmentConfig
 from application.database import db
 from flask_login import LoginManager
 from flask_restful import Resource, Api
-import pymysql
 
 
 def create_app():
