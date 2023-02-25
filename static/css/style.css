@@ -1,0 +1,46 @@
+a {
+    text-decoration: none;
+    color: inherit;
+}
+
+body {
+    font-family: "OpenSans";
+}
+
+.form-control,
+.form-check-input {
+    border: 3px solid #8ab6c1;
+    font-size: 14px;
+}
+
+.description {
+    white-space: pre-line;
+}
+
+label {
+    font-weight: bold;
+}
+
+.main {
+    width: 30vw;
+    margin: auto;
+}
+
+.nav-link {
+    color: black;
+}
+
+.warning {
+    color: red;
+    font-size: 12px;
+}
+
+@font-face {
+    font-family: "Montserrat";
+    src: url("/static/fonts/montserrat.ttf");
+}
+
+@font-face {
+    font-family: "OpenSans";
+    src: url("/static/fonts/OpenSans.ttf");
+}

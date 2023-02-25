@@ -1,0 +1,71 @@
+{% extends "base.html" %} {% block title %} New Post {% endblock title %} {%
+block css %}
+<style>
+    .new-post {
+        width: 50vw;
+        margin: auto;
+    }
+    .btn {
+        background-color: #8ab6c1;
+        font-weight: bold;
+        color: white;
+    }
+
+    .btn:hover {
+        background-color: #8ab6c1;
+        color: white;
+    }
+
+    .btn:disabled {
+        background-color: #8ab6c1;
+        color: white;
+    }
+</style>
+{% endblock css %} {% block body %}
+<div class="new-post p-5 py-2 mt-3">
+    <h3 class="text-center fw-bold">Create a Post</h3>
+    <form action="{{ url_for('create_post') }}" class="m-3" method="post">
+        <div class="mb-3">
+            <label for="formTitle" class="form-label">
+                Title <span class="text-danger">*</span></label
+            >
+            <input
+                type="text"
+                class="form-control p-2 text-input"
+                id="formTitle"
+                name="title"
+                placeholder="Enter the title"
+            />
+        </div>
+        <div class="mb-3">
+            <label for="formDescription" class="form-label">
+                Description
+                <span class="text-danger">*</span></label
+            >
+            <textarea
+                type="text"
+                class="form-control p-2 text-input"
+                id="formDescription"
+                name="description"
+                placeholder="Type the description"
+                rows="6"
+            ></textarea>
+        </div>
+        <div class="mb-3">
+            <label for="formImg" class="form-label">Upload Image</label>
+            <input
+                class="form-control w-100"
+                type="file"
+                accept="image/*"
+                name="post-img"
+                id="formImg"
+            />
+        </div>
+        <div class="text-center m-5">
+            <button type="submit" class="btn w-25 fs-4" disabled>create</button>
+        </div>
+    </form>
+</div>
+{% endblock body %} {% block js %}
+<script src="{{ url_for('static', filename='/js/create_post.js') }}"></script>
+{% endblock js %}

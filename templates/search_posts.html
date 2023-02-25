@@ -1,0 +1,60 @@
+{% extends "base.html" %} {% block title %} Search {% endblock title %} {% block
+css %}
+<style>
+    .underline {
+        border-bottom: 2px solid black;
+    }
+</style>
+{% endblock css %} {% block body %}
+<h3 class="fw-bold mt-4 px-5">Search</h3>
+<div class="p-5 py-2">
+    <form
+        class="d-flex justify-content-center"
+        role="search"
+        method="post"
+        action="{{ url_for('search_posts') }}"
+    >
+        <input
+            class="form-control me-2 w-50"
+            type="search"
+            placeholder="Search"
+            name="query"
+            value="{{ query }}"
+        />
+        <button class="btn btn-outline-dark" type="submit">Search</button>
+    </form>
+</div>
+<div class="row row-cols-2 p-5 py-0 text-center m-5 my-4">
+    <a class="col" href="{{ url_for('search_users') }}">
+        <p class="m-0 p-1">People</p>
+    </a>
+    <a class="col" href="{{ url_for('search_posts') }}">
+        <p class="m-0 underline p-1">Posts</p>
+    </a>
+</div>
+<div class="row row-cols-3 px-5">
+    {% for post in posts %}
+    <div class="col mb-4">
+        <a href="/post/{{ post.pid }}">
+            <div class="card h-100 p-3">
+                {% if post.images|length > 0 %}
+                <img
+                    src="{{ url_for('static', filename='images/' + post.images[0].url) }}"
+                    class="card-img-top"
+                    alt="post image"
+                    height=""
+                    width=""
+                />
+                {% endif %}
+                <div class="card-body">
+                    <h5 class="card-title fw-bold">{{ post.title }}</h5>
+                    <p class="card-text">{{ post.description[:300] }} . . .</p>
+                </div>
+            </div>
+        </a>
+    </div>
+    {% else %}
+    <p class="text-center my-5 col-12">No results found!</p>
+    {% endfor %}
+</div>
+{% endblock body %}

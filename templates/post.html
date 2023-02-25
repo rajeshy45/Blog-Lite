@@ -1,0 +1,168 @@
+{% extends "base.html" %} {% block title %} Top Posts {% endblock title %} {%
+block css %}
+<style>
+    .input-comment-div {
+        border-radius: 100px;
+    }
+    .comment-div {
+        border-radius: 20px;
+    }
+    .comment-pic {
+        border-radius: 50%;
+        height: 51px;
+        width: 51px;
+    }
+    .form-control {
+        border: 0px;
+        font-size: 16px;
+    }
+</style>
+{% endblock css %} {% block body %} {% if post %}
+<div class="card my-2 p-5 py-3">
+    <div class="card-body">
+        <div class="row">
+            <div class="col col-11">
+                <h5 class="card-title fs-1 fw-bold">{{ post.title }}</h5>
+            </div>
+            <div class="col col-1 text-end my-auto">
+                {% if post.user.uid==current_user.uid %}
+                <a
+                    class="d-inline"
+                    href="{{ url_for('edit_post', postId=post.pid) }}"
+                >
+                    <img
+                        src="{{ url_for('static', filename='images/pencil.png') }}"
+                        alt="edit"
+                        height="24px"
+                        width="24px"
+                        class="ms-4 d-inline"
+                    />
+                </a>
+                {% endif %}
+            </div>
+        </div>
+        <p class="card-text">
+            <small class="text-muted"
+                >by
+                <a href="{{ url_for('profile', username=post.user.uname) }}"
+                    >{{ post.user.uname }}</a
+                >
+                on {{ post.timestamp.strftime("%c") }}</small
+            >
+        </p>
+        {% if post.images|length > 0 %}
+        <img
+            src="{{ url_for('static', filename='images/' + post.images[0].url) }}"
+            class="card-img-top mb-4 mt-2"
+            alt="post image"
+            height=""
+            width=""
+        />
+        {% endif %}
+        <p class="card-text description">{{ post.description }}</p>
+    </div>
+</div>
+<div class="m-4">
+    <p id="likes" class="text-primary">
+        <img
+            src="{{ url_for('static', filename='images/like.png') }}"
+            alt="like"
+            height=""
+            width=""
+        />
+        <small> {{ post.likes|length }} </small>
+        <small class="ms-4"> {{ post.comments|length }} comments </small>
+    </p>
+    <p class="my-4 fw-bold">
+        <a href="{{ url_for('update_like', postId=post.pid) }}">
+            <img
+                src="{{ url_for('static', filename='images/like-dark.png') }}"
+                alt="like"
+                height=""
+                width=""
+                class="me-2"
+            />
+            {% if not liked %} Like {% else %} Unlike {% endif %}
+        </a>
+        <a href="#new_comment" id="add-new-comment">
+            <img
+                src="{{ url_for('static', filename='images/comment-dark.png') }}"
+                alt="like"
+                height=""
+                width=""
+                class="ms-5 me-2"
+            />
+            Comment
+        </a>
+    </p>
+    <p id="comments">Comments</p>
+    <form action="{{ url_for('add_comment', postId=post.pid) }}" method="post">
+        <div class="row input-comment-div py-2 border border-dark-subtle">
+            <div class="col col-1">
+                {% if current_user.is_authenticated %}
+                <a href="{{ url_for('profile', username=current_user.uname) }}">
+                    <img
+                        src="{{ url_for('static', filename='images/' + current_user.pro_pic) }}"
+                        alt="pro-pic"
+                        height=""
+                        width=""
+                        class="comment-pic"
+                    />
+                </a>
+                {% else %}
+                <a href="{{ url_for('login') }}">
+                    <img
+                        src="{{ url_for('static', filename='images/user.png') }}"
+                        alt="pro-pic"
+                        height=""
+                        width=""
+                        class="comment-pic"
+                    />
+                </a>
+                {% endif %}
+            </div>
+            <div class="col col-10">
+                <input
+                    class="form-control p-0 form-control-lg shadow-none w-100 h-100"
+                    id="new-comment"
+                    type="text"
+                    placeholder="Write a comment..."
+                    name="content"
+                />
+            </div>
+            <div class="col col-1">
+                <button
+                    type="submit"
+                    class="btn w-100 h-100 fs-5 shadow-none border-0 fw-bold"
+                >
+                    post
+                </button>
+            </div>
+        </div>
+    </form>
+    {% for comment in post.comments %}
+    <div class="row w-75 my-3">
+        <div class="col col-1">
+            <a href="{{ url_for('profile', username=comment.user.uname) }}">
+                <img
+                    src="{{ url_for('static', filename='images/' + comment.user.pro_pic) }}"
+                    alt="pro-pic"
+                    height=""
+                    width=""
+                    class="comment-pic"
+                />
+            </a>
+        </div>
+        <div class="col col-11 comment-div border border-dark-subtle p-3">
+            <a href="{{ url_for('profile', username=comment.user.uname) }}">
+                <h5 class="fw-bold d-inline-block">{{ comment.user.uname }}</h5>
+            </a>
+            <small class="text-muted">
+                on {{ comment.timestamp.strftime("%c") }}</small
+            >
+            <p class="m-0">{{ comment.content }}</p>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endif %} {% endblock body %}

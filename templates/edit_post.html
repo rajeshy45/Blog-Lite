@@ -1,0 +1,137 @@
+{% extends "base.html" %} {% block title %} New Post {% endblock title %} {%
+block css %}
+<style>
+    .new-post {
+        width: 50vw;
+        margin: auto;
+    }
+    .save-btn {
+        background-color: #8ab6c1;
+        font-weight: bold;
+        color: white;
+    }
+
+    .save-btn:hover {
+        background-color: #8ab6c1;
+        color: white;
+    }
+
+    .save-btn:disabled {
+        background-color: #8ab6c1;
+        color: white;
+    }
+</style>
+{% endblock css %} {% block body %}
+<div class="new-post p-5 py-2 mt-3">
+    <div class="row row-cols-3">
+        <div class="col"></div>
+        <div class="col">
+            <h3 class="text-center fw-bold m-0">Edit Post</h3>
+        </div>
+        <div class="col text-end my-auto">
+            <a
+                class="d-inline"
+                href="#"
+                data-bs-toggle="modal"
+                data-bs-target="#deleteModal"
+            >
+                <img
+                    src="{{ url_for('static', filename='images/delete.png') }}"
+                    alt="edit"
+                    height="24px"
+                    width="24px"
+                    class="ms-4 d-inline"
+                />
+            </a>
+            <div class="modal fade" id="deleteModal" tabindex="-1">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h1 class="modal-title fs-5">Delete post</h1>
+                            <button
+                                type="button"
+                                class="btn-close"
+                                data-bs-dismiss="modal"
+                                aria-label="Close"
+                            ></button>
+                        </div>
+                        <div class="modal-body text-start">
+                            Are you sure? All the data related to this post will
+                            be lost.
+                        </div>
+                        <div class="modal-footer">
+                            <button
+                                type="button"
+                                class="btn btn-secondary"
+                                data-bs-dismiss="modal"
+                            >
+                                Cancel
+                            </button>
+                            <form action="{{ url_for('delete_post', postId=post.pid) }}">
+                                <button
+                                    type="submit"
+                                    class="btn btn-outline-danger"
+                                >
+                                    Delete
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <form
+        action="{{ url_for('edit_post', postId=post.pid) }}"
+        class="m-3"
+        method="post"
+    >
+        <div class="mb-3">
+            <label for="formTitle" class="form-label">
+                Title <span class="text-danger">*</span></label
+            >
+            <input
+                type="text"
+                class="form-control p-2 text-input"
+                id="formTitle"
+                name="title"
+                placeholder="Enter the title"
+                value="{{ post.title }}"
+            />
+        </div>
+        <div class="mb-3">
+            <label for="formDescription" class="form-label">
+                Description
+                <span class="text-danger">*</span></label
+            >
+            <textarea
+                type="text"
+                class="form-control p-2 text-input"
+                id="formDescription"
+                name="description"
+                placeholder="Type the description"
+                rows="6"
+            >
+{{ post.description }}</textarea
+            >
+        </div>
+        <div class="mb-3">
+            <label for="formImg" class="form-label">Upload Image</label>
+            <input
+                class="form-control w-100"
+                type="file"
+                accept="image/*"
+                name="post-img"
+                id="formImg"
+            />
+        </div>
+        <div class="text-center m-5">
+            <button type="submit" class="btn save-btn w-25 fs-4" disabled>
+                save
+            </button>
+        </div>
+    </form>
+</div>
+{% endblock body %} {% block js %}
+<script src="{{ url_for('static', filename='/js/create_post.js') }}"></script>
+{% endblock js %}

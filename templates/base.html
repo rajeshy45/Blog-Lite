@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="description" content="Welcome to Blog Lite." />
+        <meta name="keywords" content="Blog" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>{% block title %} {% endblock title %} - Blog Lite</title>
+        <link
+            href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css"
+            rel="stylesheet"
+            integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD"
+            crossorigin="anonymous"
+        />
+        <link
+            rel="stylesheet"
+            href="{{ url_for('static', filename='css/style.css') }}"
+        />
+        {% block css %} {% endblock css %}
+    </head>
+    <body>
+        <div class="container">
+            {% block navbar %}
+            <nav class="navbar navbar-expand-lg p-5 pt-3 pb-0">
+                <div class="container-fluid">
+                    <a class="navbar-brand" href="{{ url_for('index') }}">
+                        <img
+                            src="{{ url_for('static', filename='images/blog_lite.png') }}"
+                            alt="logo"
+                            width=""
+                            height=""
+                        />
+                    </a>
+                    <button
+                        class="navbar-toggler"
+                        type="button"
+                        data-bs-toggle="collapse"
+                        data-bs-target="#navbarSupportedContent"
+                    >
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                    <div
+                        class="collapse navbar-collapse"
+                        id="navbarSupportedContent"
+                    >
+                        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                            <li class="nav-item ms-5">
+                                <a
+                                    class="nav-link nav-home-text"
+                                    href="{{ url_for('index') }}"
+                                    >Home</a
+                                >
+                            </li>
+                            {% if current_user.is_authenticated %}
+                            <li class="nav-item ms-5">
+                                <a
+                                    class="nav-link nav-profile-text"
+                                    href="{{ url_for('profile', username=current_user.uname) }}"
+                                    >Profile</a
+                                >
+                            </li>
+                            {% else %}
+                            <li class="nav-item ms-5">
+                                <a
+                                    class="nav-link nav-profile-text"
+                                    href="{{ url_for('login') }}"
+                                    >Profile</a
+                                >
+                            </li>
+                            {% endif %}
+                            <li class="nav-item ms-5">
+                                <a
+                                    class="nav-link nav-tp-text"
+                                    href="{{ url_for('top_posts') }}"
+                                    >Top Posts</a
+                                >
+                            </li>
+                        </ul>
+                        <a
+                            class="nav-link"
+                            href="{{ url_for('search_users') }}"
+                        >
+                            <img
+                                src="{{ url_for('static', filename='images/search.png') }}"
+                                alt="search"
+                                width=""
+                                height=""
+                            />
+                        </a>
+                        {% if not current_user.is_authenticated %}
+                        <form action="{{ url_for('signup') }}">
+                            <button
+                                class="btn btn-outline-dark ms-4"
+                                type="submit"
+                            >
+                                Sign Up
+                            </button>
+                        </form>
+                        {% endif %} {% if current_user.is_authenticated %}
+                        <a
+                            class="nav-link ms-4"
+                            href="{{ url_for('profile', username=current_user.uname) }}"
+                            >{{ current_user.uname }}</a
+                        >
+                        <a class="nav-link ms-4" href="{{ url_for('logout') }}"
+                            >Logout</a
+                        >
+                        {% endif %}
+                    </div>
+                </div>
+            </nav>
+            {% endblock navbar %} {% block body %} {% endblock body %}
+        </div>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
+        <script
+            src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN"
+            crossorigin="anonymous"
+        ></script>
+        <script src="{{ url_for('static', filename='js/index.js') }}"></script>
+        {% block js %} {% endblock js %}
+    </body>
+</html>

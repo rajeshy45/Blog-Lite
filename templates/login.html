@@ -1,0 +1,77 @@
+{% extends "base.html" %} {% block title %} Login {% endblock title %} {% block
+css %}
+<style>
+    a {
+        color: #8ab6c1;
+    }
+
+    .btn {
+        background-color: #8ab6c1;
+        font-weight: bold;
+        color: white;
+    }
+
+    .btn:hover {
+        background-color: #8ab6c1;
+        color: white;
+    }
+</style>
+{% block navbar %} {% endblock navbar %} {% endblock css %} {% block body %}
+<div class="main p-3 mt-5">
+    {% with msgs = get_flashed_messages(category_filter=["login"]) %} {% if msgs
+    %}
+    <p class="warning text-center">{{ msgs[0] }}</p>
+    {% endif %} {% endwith %}
+    <div class="text-center">
+        <a href="{{ url_for('index') }}">
+            <img
+                src="{{ url_for('static', filename='images/blog_lite.png') }}"
+                alt="logo"
+                height=""
+                width=""
+            />
+        </a>
+    </div>
+    <form action="{{ url_for('login') }}" method="post" class="m-3">
+        <div class="mb-4">
+            <label for="formUname" class="form-label"> Username </label>
+            <input
+                type="text"
+                class="form-control p-2"
+                id="formUname"
+                name="uname"
+                placeholder="Enter username"
+            />
+        </div>
+        <div class="mb-4">
+            <label for="formPassword" class="form-label">Password</label>
+            <input
+                type="password"
+                class="form-control pwd p-2"
+                id="formPassword"
+                placeholder="Enter password"
+                name="pwd"
+            />
+        </div>
+        <div class="mb-4 form-check">
+            <input
+                type="checkbox"
+                class="form-check-input show-pwd-check"
+                id="formCheck"
+                name="checkbox"
+            />
+            <label class="form-check-label" for="formCheck">
+                Show password
+            </label>
+        </div>
+        {% if message %}
+        <p class="warning text-center">{{ message }}</p>
+        {% endif %}
+        <button type="submit" class="btn w-100 fs-5">Login</button>
+    </form>
+    <p class="text-center">
+        Don't have an account?
+        <a href="{{ url_for('signup') }}">Sign Up</a>
+    </p>
+</div>
+{% endblock body %}

@@ -1,0 +1,161 @@
+{% extends "base.html" %} {% block title %} Edit Profile {% endblock title %} {%
+block css %}
+<style>
+    .new-post {
+        width: 50vw;
+        margin: auto;
+    }
+    .btn {
+        background-color: #8ab6c1;
+        font-weight: bold;
+        color: white;
+    }
+
+    .btn:hover {
+        background-color: #8ab6c1;
+        color: white;
+    }
+
+    .btn:disabled {
+        background-color: #8ab6c1;
+        color: white;
+    }
+</style>
+{% endblock css %} {% block body %}
+<div class="new-post p-5 py-2 mt-3">
+    <h3 class="text-center fw-bold">Edit Profile</h3>
+    <form action="{{ url_for('edit_profile') }}" class="m-3" method="post">
+        <div class="row">
+            <div class="col col-8 mb-3">
+                <label for="formImg" class="form-label">Profile Image</label>
+                <input
+                    class="form-control w-100"
+                    type="file"
+                    accept="image/*"
+                    name="pro-img"
+                    id="formImg"
+                    value="{{ current_user.pro_pic }}"
+                />
+            </div>
+            <div class="mb-3 col col-4">
+                <label for="formUname" class="form-label">
+                    Username <span class="text-danger">*</span></label
+                >
+                <input
+                    type="text"
+                    class="form-control p-2"
+                    id="formUname"
+                    name="uname"
+                    placeholder="Enter username"
+                    value="{{ current_user.uname }}"
+                    disabled
+                />
+            </div>
+        </div>
+        <div class="row row-cols-3">
+            <div class="mb-3">
+                <label for="formEmail" class="form-label">
+                    Email address <span class="text-danger">*</span></label
+                >
+                <input
+                    type="email"
+                    class="form-control p-2"
+                    id="formEmail"
+                    name="email"
+                    placeholder="Enter email address"
+                    value="{{ current_user.email }}"
+                    disabled
+                />
+            </div>
+            <div class="col mb-3">
+                <label for="formFname" class="form-label">
+                    First name <span class="text-danger">*</span></label
+                >
+                <input
+                    type="text"
+                    class="form-control p-2 text-input"
+                    id="formFname"
+                    name="fname"
+                    placeholder="Enter first name"
+                    value="{{ current_user.fname }}"
+                />
+            </div>
+            <div class="col mb-3">
+                <label for="formLname" class="form-label">
+                    Last name <span class="text-danger">*</span></label
+                >
+                <input
+                    type="text"
+                    class="form-control p-2 text-input"
+                    id="formLname"
+                    name="lname"
+                    placeholder="Enter last name"
+                    value="{{ current_user.lname }}"
+                />
+            </div>
+        </div>
+        <div class="mb-3">
+            <label for="formBio" class="form-label"> Bio </label>
+            <textarea
+                type="text"
+                class="form-control p-2"
+                id="formBio"
+                name="bio"
+                placeholder="Type the bio"
+                rows="3"
+            >{{ current_user.bio }}</textarea>
+        </div>
+        <div class="row row-cols-3">
+            <div class="col">
+                <label for="formPassword" class="form-label">
+                    Password <span class="text-danger">*</span></label
+                >
+                <input
+                    type="password"
+                    class="form-control pwd p-2 text-input"
+                    id="formPassword"
+                    name="pwd"
+                    placeholder="Enter password"
+                    value="{{ current_user.pwd }}"
+                />
+            </div>
+            <div class="col">
+                <label for="formConfPassword" class="form-label">
+                    Confirm password
+                    <span class="text-danger">*</span></label
+                >
+                <input
+                    type="password"
+                    class="form-control pwd p-2 text-input"
+                    id="formConfPassword"
+                    placeholder="Enter password"
+                    name="confPwd"
+                    value="{{ current_user.pwd }}"
+                />
+            </div>
+            <div class="mt-3 form-check col">
+                <input
+                    type="checkbox"
+                    class="form-check-input show-pwd-check ms-2"
+                    id="formCheck"
+                    name="checkbox"
+                />
+                <label class="form-check-label ms-2" for="formCheck">
+                    Show password
+                </label>
+            </div>
+        </div>
+        <p class="warning d-none pwd-match-warning my-1">
+            passwords did not match
+        </p>
+        <p class="warning d-none pwd-len-warning my-1">
+            password must contain atleast 8 characters
+        </p>
+        <div class="text-center m-5">
+            <button type="submit" class="btn w-25 fs-4">save</button>
+        </div>
+    </form>
+</div>
+{% endblock body %} {% block js %}
+<script src="{{ url_for('static', filename='/js/edit_profile.js') }}"></script>
+{% endblock js %}

@@ -1,0 +1,142 @@
+{% extends "base.html" %} {% block title %} Sign Up {% endblock title %} {%
+block css %}
+<style>
+    a {
+        color: #8ab6c1;
+    }
+
+    .btn {
+        background-color: #8ab6c1;
+        font-weight: bold;
+        color: white;
+    }
+
+    .btn:hover {
+        background-color: #8ab6c1;
+        color: white;
+    }
+
+    .btn:disabled {
+        background-color: #8ab6c1;
+        color: white;
+    }
+</style>
+{% endblock css %} {% block navbar %} {% endblock navbar %} {% block body %}
+<div class="main p-3">
+    <div class="text-center">
+        <a href="{{ url_for('index') }}">
+            <img
+                src="{{ url_for('static',
+                    filename='images/blog_lite.png') }}"
+                alt="logo"
+                height=""
+                width=""
+            />
+        </a>
+    </div>
+    <form action="{{ url_for('signup') }}" class="m-3" method="post">
+        <div class="mb-3">
+            <label for="formUname" class="form-label">
+                Username <span class="text-danger">*</span></label
+            >
+            <input
+                type="text"
+                class="form-control p-2"
+                id="formUname"
+                name="uname"
+                placeholder="Enter username"
+            />
+        </div>
+        <div class="row mb-3">
+            <div class="col col-6">
+                <label for="formFname" class="form-label">
+                    First name <span class="text-danger">*</span></label
+                >
+                <input
+                    type="text"
+                    class="form-control p-2"
+                    id="formFname"
+                    name="fname"
+                    placeholder="Enter first name"
+                />
+            </div>
+            <div class="col col-6">
+                <label for="formLname" class="form-label">
+                    Last name <span class="text-danger">*</span></label
+                >
+                <input
+                    type="text"
+                    class="form-control p-2"
+                    id="formLname"
+                    name="lname"
+                    placeholder="Enter last name"
+                />
+            </div>
+        </div>
+        <div class="mb-3">
+            <label for="formEmail" class="form-label">
+                Email address <span class="text-danger">*</span></label
+            >
+            <input
+                type="email"
+                class="form-control p-2"
+                id="formEmail"
+                name="email"
+                placeholder="Enter email address"
+            />
+        </div>
+        <div class="mb-3">
+            <label for="formPassword" class="form-label">
+                Password <span class="text-danger">*</span></label
+            >
+            <input
+                type="password"
+                class="form-control pwd p-2"
+                id="formPassword"
+                name="pwd"
+                placeholder="Enter password"
+            />
+        </div>
+        <div class="mb-3">
+            <label for="formConfPassword" class="form-label">
+                Confirm password
+                <span class="text-danger">*</span></label
+            >
+            <input
+                type="password"
+                class="form-control pwd p-2"
+                id="formConfPassword"
+                placeholder="Enter password"
+                name="confPwd"
+            />
+        </div>
+        <p class="warning d-none pwd-match-warning my-1">
+            passwords did not match
+        </p>
+        <p class="warning d-none pwd-len-warning my-1">
+            password must contain atleast 8 characters
+        </p>
+        <div class="my-3 form-check">
+            <input
+                type="checkbox"
+                class="form-check-input show-pwd-check"
+                id="formCheck"
+                name="checkbox"
+            />
+            <label class="form-check-label" for="formCheck">
+                Show password
+            </label>
+        </div>
+        {% if message %}
+        <p class="warning text-center">{{ message }}</p>
+        {% endif %}
+        <button type="submit" class="btn w-100 fs-5" disabled>Sign Up</button>
+    </form>
+    <p class="text-center">
+        Already have an account?
+        <a href="{{ url_for('login') }}">Login</a>
+    </p>
+</div>
+{% endblock body %} {% block js %}
+<script src="{{ url_for('static', filename='/js/signup.js') }}"></script>
+{% endblock js %}

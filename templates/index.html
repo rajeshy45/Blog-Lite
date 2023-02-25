@@ -1,0 +1,51 @@
+{% extends "base.html" %} {% block title %} Welcome {% endblock title %} {%
+block css %}
+<style>
+    .container {
+        position: relative;
+    }
+    .home-text {
+        position: absolute;
+        bottom: 6.5%;
+    }
+
+    .home-text h1 {
+        font-family: "Inika-Bold";
+    }
+
+    .home-text h2 {
+        font-family: "Inria-Serif";
+    }
+
+    .nav-home-text {
+        font-weight: bold;
+    }
+
+    @font-face {
+        font-family: "Inika-Bold";
+        src: url("/static/fonts/Inika-Bold.ttf");
+    }
+
+    @font-face {
+        font-family: "Inria-Serif";
+        src: url("/static/fonts/InriaSerif-Regular.ttf");
+    }
+</style>
+{% endblock css %} {% block body %}
+<img
+    class="w-100 mt-2"
+    src="{{ url_for('static', filename='images/home.png') }}"
+    alt="home"
+    width=""
+    height=""
+/>
+<div class="ps-5 home-text">
+    <h1 class="fw-bold text-light">Express your views</h1>
+    <h2 class="text-light">Build your own blog...</h2>
+    <form action="{{ url_for('signup') }}">
+        <button class="btn btn-outline-light mt-3" type="submit">
+            Get Started
+        </button>
+    </form>
+</div>
+{% endblock body %}
