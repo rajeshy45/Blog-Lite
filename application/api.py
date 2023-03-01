@@ -177,32 +177,15 @@ class UserAPI(Resource):
 
 
 class PostAPI(Resource):
-    #@marshal_with(post_output_fields)
+    @marshal_with(post_output_fields)
     def get(self, postId=None):
-        # if postId is None:
-        #     raise NotFoundError(status_code=404)
-        # post = db.session.query(Post).filter(Post.pid == postId).first()
-        # if post:
-        #     return post
-        # else:
-        #     raise NotFoundError(status_code=404)
-
-        posts = db.session.query(Post).all()
-
-        res = []
-
-        for post in posts:
-            pid = post.pid
-            title = post.title
-
-            d = {"pid": pid, "title": title}
-
-            res.append(d)
-        
-        data = json.dumps(res)
-
-        return data, 200
-
+        if postId is None:
+            raise NotFoundError(status_code=404)
+        post = db.session.query(Post).filter(Post.pid == postId).first()
+        if post:
+            return post
+        else:
+            raise NotFoundError(status_code=404)
 
     def post(self):
         args = create_post_parser.parse_args()

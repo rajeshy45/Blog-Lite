@@ -61,16 +61,33 @@ def signup():
         return redirect(url_for("home"))
     message = None
     if request.method == "POST":
-        data = request.form.to_dict(flat=True)
+        uname = request.form["uname"]
+        fname = request.form["fname"]
+        lname = request.form["lname"]
+        email = request.form["email"]
+        pwd = request.form["pwd"]
 
-        response = requests.post(url=base_url + "/api/user", json=data)
+        try:
+            user = db.session.query(User).filter(User.email == email).first()
 
-        if response.status_code == 200:
+            if user:
+                raise Exception("Duplicate user found!")
+
+            user = db.session.query(User).filter(User.uname == uname).first()
+
+            if user:
+                raise Exception("Username not available!")
+
+            user = User(uname, fname, lname, email, pwd)
+            db.session.add(user)
+            db.session.commit()
+
             flash("Account created successfully! Please Login!", "login")
             return redirect(url_for("login"))
 
-        data = response.json()
-        message = data["error_message"]
+        except Exception as e:
+            message = str(e)
+
     return render_template("signup.html", message=message)
 
 
@@ -162,14 +179,16 @@ def update_like(postId):
 @login_required
 def create_post():
     if request.method == "POST":
-        data = {
-            "uid": current_user.uid,
-            "title": request.form["title"],
-            "description": request.form["description"]
-        }
+        title = request.form["title"]
+        description = request.form["description"]
+        timestamp = datetime.now()
+        uid = current_user.uid
 
-        response = requests.post(url=base_url + "/api/post", json=data)
-        pid = response.content.decode()
+        post = Post(title, description, timestamp, uid)
+        db.session.add(post)
+        db.session.commit()
+
+        pid = post.pid
 
         post_img = request.form["post-img"]
 
@@ -194,31 +213,35 @@ def edit_post(postId):
         img = request.form["post-img"]
         if img == "":
             img = post.images[0].url if post.images else None
-        data = {
-            "title": request.form["title"],
-            "description": request.form["description"]
-        }
+        title = request.form["title"]
+        description = request.form["description"]
 
-        response = requests.put(
-            url=base_url + "/api/post/" + str(post.pid), json=data)
+        post = db.session.query(Post).filter(Post.pid == postId).first()
 
-        if response.status_code == 200:
+        if post is None:
+            raise NotFoundError(status_code=404)
 
-            if img:
-                image = db.session.query(Image).filter(
-                    Image.pid == post.pid).first()
+        post.title = title
+        post.description = description
 
-                if image:
-                    image.url = img
-                else:
-                    image = Image(img, post.pid)
+        db.session.add(post)
+        db.session.commit()
 
-                db.session.add(image)
-                db.session.commit()
+        if img:
+            image = db.session.query(Image).filter(
+                Image.pid == post.pid).first()
 
-            user = User.query.get(int(current_user.uid))
-            login_user(user)
-            return redirect(url_for("post", postId=post.pid))
+            if image:
+                image.url = img
+            else:
+                image = Image(img, post.pid)
+
+            db.session.add(image)
+            db.session.commit()
+
+        user = User.query.get(int(current_user.uid))
+        login_user(user)
+        return redirect(url_for("post", postId=post.pid))
     return render_template("edit_post.html", current_user=current_user, post=post)
 
 
@@ -273,21 +296,34 @@ def edit_profile():
         img = request.form["pro-img"]
         if img == "":
             img = current_user.pro_pic
-        data = {
-            "fname": request.form["fname"],
-            "lname": request.form["lname"],
-            "bio": request.form["bio"],
-            "pro_pic": img,
-            "pwd": request.form["pwd"]
-        }
+        fname = request.form["fname"],
+        lname = request.form["lname"],
+        bio = request.form["bio"],
+        pro_pic = img,
+        pwd = request.form["pwd"]
 
-        response = requests.put(
-            url=base_url + "/api/user/" + current_user.uname, json=data)
+        user = db.session.query(User).filter(
+            User.uname == current_user.username).first()
 
-        if response.status_code == 200:
-            user = User.query.get(int(current_user.uid))
-            login_user(user)
-            return redirect(url_for("profile", username=current_user.uname))
+        if user is None:
+            raise NotFoundError(status_code=404)
+
+        if len(pwd) < 8:
+            raise BusinessValidationError(
+                status_code=400, error_code="BE103", error_message="Password must contain at least 8 characters!")
+
+        user.fname = fname
+        user.lname = lname
+        user.pro_pic = pro_pic
+        user.bio = bio
+        user.pwd = pwd
+
+        db.session.add(user)
+        db.session.commit()
+
+        user = User.query.get(int(current_user.uid))
+        login_user(user)
+        return redirect(url_for("profile", username=current_user.uname))
     return render_template("edit_profile.html", current_user=current_user)
 
 
