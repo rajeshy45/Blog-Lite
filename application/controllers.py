@@ -5,9 +5,10 @@ from flask import current_app as app
 from flask_login import login_user, login_required, current_user, logout_user
 from application.models import *
 from application.validation import *
-import requests
+from werkzeug.utils import secure_filename
+import os
 
-base_url = 'http://127.0.0.1:8080'
+UPLOAD_FOLDER = '/home/rajeshy45/Blog-Lite/static/images'
 
 
 @app.route("/", methods=["GET"])
@@ -190,12 +191,19 @@ def create_post():
 
         pid = post.pid
 
-        post_img = request.form["post-img"]
+        if 'post-img' in request.files:
+            file = request.files['post-img']
 
-        if post_img:
-            img = Image(post_img, pid)
-            db.session.add(img)
-            db.session.commit()
+            if file.filename:
+                filename = secure_filename(file.filename)
+                file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+
+                post_img = filename
+
+                if post_img:
+                    img = Image(post_img, pid)
+                    db.session.add(img)
+                    db.session.commit()
 
         return redirect(url_for("post", postId=pid))
     return render_template("create_post.html", current_user=current_user)
@@ -210,9 +218,12 @@ def edit_post(postId):
         raise NotFoundError(status_code=404)
 
     if request.method == "POST":
-        img = request.form["post-img"]
-        if img == "":
-            img = post.images[0].url if post.images else None
+        img = request.files["post-img"]
+        filename = secure_filename(img.filename)
+        if filename == "":
+            filename = post.images[0].url if post.images else None
+        else:
+            img.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
         title = request.form["title"]
         description = request.form["description"]
 
@@ -227,14 +238,14 @@ def edit_post(postId):
         db.session.add(post)
         db.session.commit()
 
-        if img:
+        if filename:
             image = db.session.query(Image).filter(
                 Image.pid == post.pid).first()
 
             if image:
-                image.url = img
+                image.url = filename
             else:
-                image = Image(img, post.pid)
+                image = Image(filename, post.pid)
 
             db.session.add(image)
             db.session.commit()
@@ -299,16 +310,18 @@ def connection(username):
 @login_required
 def edit_profile():
     if request.method == "POST":
-        img = request.form["pro-img"]
-        if img == "":
-            img = current_user.pro_pic
+        print(request.files)
+        img = request.files["pro-img"]
+        filename = secure_filename(img.filename)
+        if filename == "":
+            filename = current_user.pro_pic
+        else:
+            img.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
         fname = request.form["fname"]
         lname = request.form["lname"]
         bio = request.form["bio"]
-        pro_pic = img
+        pro_pic = filename
         pwd = request.form["pwd"]
-
-        print(fname, lname, bio, pro_pic, pwd)
 
         user = db.session.query(User).filter(
             User.uname == current_user.uname).first()

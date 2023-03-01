@@ -24,7 +24,7 @@ block css %}
 {% endblock css %} {% block body %}
 <div class="new-post p-5 py-2 mt-3">
     <h3 class="text-center fw-bold">Create a Post</h3>
-    <form action="{{ url_for('create_post') }}" class="m-3" method="post">
+    <form action="{{ url_for('create_post') }}" class="m-3" method="post" enctype="multipart/form-data">
         <div class="mb-3">
             <label for="formTitle" class="form-label">
                 Title <span class="text-danger">*</span></label

@@ -67,7 +67,9 @@ block css %}
                             >
                                 Cancel
                             </button>
-                            <form action="{{ url_for('delete_post', postId=post.pid) }}">
+                            <form
+                                action="{{ url_for('delete_post', postId=post.pid) }}"
+                            >
                                 <button
                                     type="submit"
                                     class="btn btn-outline-danger"
@@ -85,6 +87,7 @@ block css %}
         action="{{ url_for('edit_post', postId=post.pid) }}"
         class="m-3"
         method="post"
+        enctype="multipart/form-data"
     >
         <div class="mb-3">
             <label for="formTitle" class="form-label">

@@ -24,7 +24,7 @@ block css %}
 {% endblock css %} {% block body %}
 <div class="new-post p-5 py-2 mt-3">
     <h3 class="text-center fw-bold">Edit Profile</h3>
-    <form action="{{ url_for('edit_profile') }}" class="m-3" method="post">
+    <form action="{{ url_for('edit_profile') }}" class="m-3" method="post" enctype="multipart/form-data">
         <div class="row">
             <div class="col col-8 mb-3">
                 <label for="formImg" class="form-label">Profile Image</label>

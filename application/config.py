@@ -16,3 +16,4 @@ class LocalDevelopmentConfig(Config):
         os.path.join(SQLITE_DB_DIR, "blog-lite-db.sqlite3")
     DEBUG = True
     SECRET_KEY = "blog-lite-security-key"
+    UPLOAD_FOLDER = "/home/rajesh/Documents/GitHub/Blog-Lite/static/images"
