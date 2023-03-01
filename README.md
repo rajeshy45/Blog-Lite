@@ -1,9 +1,9 @@
 # Blog Lite
 
-## Visit
-rajeshy45.pythonanywhere.com
-
 A simple blogging website.
+
+## Visit
+http://rajeshy45.pythonanywhere.com
 
 ## Steps to run the application
 
