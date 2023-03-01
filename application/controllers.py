@@ -253,10 +253,16 @@ def delete_post(postId):
     if post is None or post not in current_user.posts:
         raise NotFoundError(status_code=404)
 
-    response = requests.delete(
-        url=base_url + "/api/post/" + str(post.pid))
-
-    app.logger.info(response.content.decode())
+    db.session.query(Image).filter(
+        Image.pid == post.pid).delete()
+    db.session.query(Comment).filter(
+        Comment.pid == post.pid).delete()
+    db.session.query(Like).filter(
+        Like.pid == post.pid).delete()
+    db.session.query(Post).filter(
+        Post.pid == post.pid).delete()
+    db.session.delete(post)
+    db.session.commit()
 
     user = User.query.get(int(current_user.uid))
     login_user(user)
@@ -296,14 +302,16 @@ def edit_profile():
         img = request.form["pro-img"]
         if img == "":
             img = current_user.pro_pic
-        fname = request.form["fname"],
-        lname = request.form["lname"],
-        bio = request.form["bio"],
-        pro_pic = img,
+        fname = request.form["fname"]
+        lname = request.form["lname"]
+        bio = request.form["bio"]
+        pro_pic = img
         pwd = request.form["pwd"]
 
+        print(fname, lname, bio, pro_pic, pwd)
+
         user = db.session.query(User).filter(
-            User.uname == current_user.username).first()
+            User.uname == current_user.uname).first()
 
         if user is None:
             raise NotFoundError(status_code=404)
