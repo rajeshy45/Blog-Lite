@@ -6,9 +6,8 @@ from flask_login import login_user, login_required, current_user, logout_user
 from application.models import *
 from application.validation import *
 from werkzeug.utils import secure_filename
+from werkzeug.security import generate_password_hash, check_password_hash
 import os
-
-UPLOAD_FOLDER = '/home/rajeshy45/Blog-Lite/static/images'
 
 
 @app.route("/", methods=["GET"])
@@ -39,7 +38,7 @@ def login():
         pwd = request.form["pwd"]
         try:
             user = User.query.filter_by(uname=uname).first()
-            if user.pwd != pwd:
+            if not check_password_hash(user.pwd, pwd):
                 raise Exception("Invalid credentials!")
             login_user(user, remember=False)
         except:
@@ -66,7 +65,7 @@ def signup():
         fname = request.form["fname"]
         lname = request.form["lname"]
         email = request.form["email"]
-        pwd = request.form["pwd"]
+        pwd = generate_password_hash(request.form["pwd"])
 
         try:
             user = db.session.query(User).filter(User.email == email).first()
@@ -321,7 +320,7 @@ def edit_profile():
         lname = request.form["lname"]
         bio = request.form["bio"]
         pro_pic = filename
-        pwd = request.form["pwd"]
+        pwd = generate_password_hash(request.form["pwd"])
 
         user = db.session.query(User).filter(
             User.uname == current_user.uname).first()

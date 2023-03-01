@@ -3,6 +3,7 @@ from application.database import db
 from application.models import *
 from application.validation import *
 from datetime import datetime
+from werkzeug.security import generate_password_hash, check_password_hash
 
 user_output_fields = {
     "uid": fields.Integer,
@@ -64,7 +65,7 @@ class UserAPI(Resource):
         fname = args.get("fname", None)
         lname = args.get("lname", None)
         email = args.get("email", None)
-        pwd = args.get("pwd", None)
+        pwd = generate_password_hash(args.get("pwd", None))
 
 
         user = db.session.query(User).filter(User.email == email).first()
@@ -153,7 +154,7 @@ class UserAPI(Resource):
         lname = args.get("lname", None)
         pro_pic = args.get("pro_pic", None)
         bio = args.get("bio", None)
-        pwd = args.get("pwd", None)
+        pwd = generate_password_hash(args.get("pwd", None))
 
         user = db.session.query(User).filter(User.uname == username).first()
 
