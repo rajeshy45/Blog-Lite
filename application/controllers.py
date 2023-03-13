@@ -10,6 +10,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 import os
 
 
+
 @app.route("/", methods=["GET"])
 def index():
     if current_user.is_authenticated:

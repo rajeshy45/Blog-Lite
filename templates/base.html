@@ -17,12 +17,27 @@
             rel="stylesheet"
             href="{{ url_for('static', filename='css/style.css') }}"
         />
+        <style>
+            .logo {
+                max-width: max(20vw, 80px);
+                max-height: max(20vw, 80px);
+                width: auto;
+                height: auto;
+            }
+            nav {
+                padding: 5vw;
+                margin-top: 1vw;
+            }
+            .navbar-toggler-icon {
+                font-size: 2.5vw;
+            }
+        </style>
         {% block css %} {% endblock css %}
     </head>
     <body>
-        <div class="container">
+        <div class="container-xxl">
             {% block navbar %}
-            <nav class="navbar navbar-expand-lg p-5 pt-3 pb-0">
+            <nav class="navbar navbar-expand-lg pb-0">
                 <div class="container-fluid">
                     <a class="navbar-brand" href="{{ url_for('index') }}">
                         <img
@@ -30,6 +45,7 @@
                             alt="logo"
                             width=""
                             height=""
+                            class="logo"
                         />
                     </a>
                     <button
